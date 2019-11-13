@@ -13,9 +13,15 @@ var firebaseConfig = {
 
 let grid = document.getElementById('grid');
 let container = document.getElementById('grid');
+let login = localStorage.getItem('loggedIn');
+
 let bit = [];
 
+if(login == null){
+    window.location.replace('register.html')
+}
 function createGrid(){
+    if(container !== null){
     container.innerHTML = ""; 
     let leadsRef = firebase.database().ref('grid');
     leadsRef.on('value', function(snapshot) {
@@ -25,42 +31,24 @@ function createGrid(){
                 bit.push(val)
                 generateCharacter()
 
-            }else{
-                bit = []
-                for (let x = 0; x < 64; x++) {
-                    let div = document.createElement('div');
-                    div.className = x;
-                    bit.push(0);
-                    container.append(div)
-                } 
-
-            }
-            
+            }    
     }); 
-    
-    
+} 
 }createGrid();
-
-
 
 function pushFirebase(){
     console.log(bit)
-    firebase.database().ref("/grid").set(bit)
+    firebase.database().ref("grid").set(bit)
 
 }
 
-function loopFirebase(){
-    let leadsRef = firebase.database().ref('character');
-    leadsRef.on('value', function(snapshot) {
-        snapshot.forEach(function(childSnapshot) {
-            bit = []
-            let char = childSnapshot.val();
-            bit.push(char);
-            console.log(bit)
-        });
-    }); 
-    generateCharacter()
-}
+let measureRef = firebase.database().ref('temp');
+ measureRef.child("temperature").on('value', function(snapshot) {
+        document.getElementById("temp").innerHTML = snapshot.val()
+})
+measureRef.child("humidity").on('value', function(snapshot) {
+        document.getElementById("hum").innerHTML = snapshot.val()
+})
 
 function generateCharacter() {
     let i = 0;
@@ -70,59 +58,171 @@ function generateCharacter() {
         for( let key in element){
                 i++
                 let div = document.createElement('div');
-                div.id = element[key];
-                div.className = i;
+                div.className = "p" + element[key];
+                div.id = i;
                 container.append(div)
         };     
     })
 }
 
-function LoopRaspberry(){
-    firebase.database().ref("/pi").set({
-        loop: true
-    })
 
-}
 function VoordeurSelect(){
-    grid.addEventListener('click', function(evt) {
-        //let target = evt.target;
-        bit[evt.target.className] = 2;
-        evt.target.style.backgroundColor = 'green'; 
-        console.log(bit)
-        pushFirebase()   
-     }, false);    
+    if (this.classList.contains("active")) {
+        let squares=document.querySelectorAll(".p2")
+
+        for (i=0; i<squares.length; i++){
+        squares[i].style.background="green";
+        }
+        firebase.database().ref("Booleans/voordeur").set({
+            voordeur: false
+        }) 
+        this.classList.remove("active");
+      } else  {
+        this.classList.add("active")
+        let squares=document.querySelectorAll(".p2")
+
+        for (i=0; i<squares.length; i++){
+        squares[i].style.background="red";
+        }
+        firebase.database().ref("Booleans/voordeur").set({
+            voordeur: true
+        }) 
+
+      }
+   
 }
 function AchterdeurSelect(){
-    grid.addEventListener('click', function(evt) {
-        let target = evt.target;
-        bit[target.className] = 3;
-        target.style.backgroundColor = 'green'; 
-        pushFirebase()   
-     }, false);    
+    if (this.classList.contains("active")) {
+        let squares2=document.querySelectorAll(".p3")
+
+        for (i=0; i<squares2.length; i++){
+        squares2[i].style.background="green";
+        }
+        firebase.database().ref("Booleans/achterdeur").set({
+            achterdeur: false
+        }) 
+        this.classList.remove("active");
+      } else {
+        this.classList.add("active")
+        let squares2=document.querySelectorAll(".p3")
+
+        for (i=0; i<squares2.length; i++){
+        squares2[i].style.background="red";
+        }
+        firebase.database().ref("Booleans/achterdeur").set({
+            achterdeur: true
+        }) 
+      }
+    
 }
 function ContactSelect(){
-    grid.addEventListener('click', function(evt) {
-        let target = evt.target;
-        bit[target.className] = 4;
-        target.style.backgroundColor = 'blue'; 
-        pushFirebase()  
-     }, false);  
+    if (this.classList.contains("active")) {
+        let squares=document.querySelectorAll(".p4")
+
+        for (i=0; i<squares.length; i++){
+        squares[i].style.background="lightblue";
+        }
+
+        firebase.database().ref("Booleans/stopcontacten").set({
+            stopcontacten: false
+        }) 
+        this.classList.remove("active");
+      } else {
+        this.classList.add("active")
+        let squares=document.querySelectorAll(".p4")
+
+        for (i=0; i<squares.length; i++){
+        squares[i].style.background="darkblue";
+        }
+        firebase.database().ref("Booleans/stopcontacten").set({
+            stopcontacten: true
+        }) 
+      } 
 }
 
 function LichtSelect(){
-    grid.addEventListener('click', function(evt) {
-        let target = evt.target;
-        bit[target.className] = 5;
-        target.style.backgroundColor = 'Yellow';   
-        pushFirebase()   
-     }, false);    
+    if (this.classList.contains("active")) {
+       
+        let squares=document.querySelectorAll(".p5")
+
+        for (i=0; i<squares.length; i++){
+        squares[i].style.background="yellow";
+        }
+        firebase.database().ref("Booleans/lichtpunten").set({
+            lichtpunten: false
+        })   
+        this.classList.remove("active");
+      } else{
+        this.classList.add("active")
+        let squares=document.querySelectorAll(".p5")
+
+        for (i=0; i<squares.length; i++){
+        squares[i].style.background="rgb(143, 143, 19)";
+        }
+        firebase.database().ref("Booleans/lichtpunten").set({
+            lichtpunten: true
+        })   
+      }
+    
+}
+function Alarm(){
+    var x = document.getElementById("myAudio"); 
+
+    if (this.classList.contains("active")) {
+        this.classList.remove("active")
+
+        firebase.database().ref("Booleans/Alarm").set({
+            Alarm: false
+        }) 
+        x.pause();
+        x.currentTime = 0;
+        let squares=document.querySelectorAll(".p5, .p4");
+        for (i=0; i<squares.length; i++){
+        squares[i].classList.remove("demo")
+        }
+        document.querySelector('#Alarm').innerHTML = "OFF";
+        
+      } else{
+        this.classList.add("active")
+        document.querySelector('#Alarm').innerHTML = "ON";
+        x.play();
+        x.currentTime = 10;
+
+        firebase.database().ref("Booleans/voordeur").set({
+            voordeur: false
+        }) 
+        firebase.database().ref("Booleans/achterdeur").set({
+            achterdeur: false
+        }) 
+        firebase.database().ref("Booleans/Alarm").set({
+            Alarm: true
+        }) 
+        let squares=document.querySelectorAll(".p5, .p4");
+
+        for (i=0; i<squares.length; i++){
+        squares[i].classList.add("demo")
+        }
+        let btn = document.querySelectorAll('.fancy-button');
+        for (i=0; i<btn.length; i++){
+            btn[i].classList.remove("active")
+            }
+
+        let squares2=document.querySelectorAll(".p3, .p2")
+
+        for (i=0; i<squares2.length; i++){
+        squares2[i].style.background="green";
+        }
+        /*firebase.database().ref("Booleans/lichtpunten").set({
+            lichtpunten: true
+        })  */ 
+      }
 }
 function edit(){
     grid.addEventListener('click', function(evt) {
         let target = evt.target;
         bit[target.className] = 0;
         target.style.backgroundColor = '';
-        pushFirebase()  
+        //pushFirebase()  
      
      }, false);
 }
@@ -130,7 +230,8 @@ document.getElementById("voordeur").addEventListener("click", VoordeurSelect);
 document.getElementById("stopcontact").addEventListener("click", ContactSelect);
 document.getElementById("achterdeur").addEventListener("click", AchterdeurSelect);
 document.getElementById("lichtpunten").addEventListener("click", LichtSelect);
-document.getElementById("edit").addEventListener("click", edit);
+document.getElementById("AlarmBtn").addEventListener("click", Alarm);
+
 
 
 

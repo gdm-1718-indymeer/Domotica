@@ -5,27 +5,58 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link rel="stylesheet" type="text/css" href="assets/css/app.css">
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.css">
+    <script src="https://use.fontawesome.com/1a75a9f079.js"></script>
 
 
     <title>Document</title>
 </head>
 <body>
+        <audio id="myAudio">
+                <source src="assets/song/intrudor.mp3" type="audio/mpeg">
+                Your browser does not support the audio element.
+        </audio>
 
-<div id="grid">
+        
+<div id="container">
+    <section>
 
+    <div id="grid">
+
+    </div>
+    <div id="buttons">
+        <a href="#" class="fancy-button bg-gradient1" id="voordeur"><span> <i class="fas fa-door-open"></i></i>Voordeur</span></a>
+        <a href="#" class="fancy-button bg-gradient1" id="achterdeur"><span><i class="fas fa-door-open"></i></i>Achterdeur</span></a>
+        <a href="#" class="fancy-button bg-gradient2" id="stopcontact"><span><i class="fas fa-plug"></i></i>Stopcontact</span></a>
+        <a href="#" class="fancy-button bg-gradient3" id="lichtpunten"><span><i class="far fa-lightbulb"></i></i>Lichtpunten</span></a>
+    </div>
+    </section>
+
+    <section>
+    <div class="app">
+
+        <ul class="widget">
+        <li>
+            <h2>Temperature</h2>
+            <div  class="val"><span id="temp"></span><small><sup>°</sup>c</small></div>
+        </li>
+        <li>
+                <i class="fas fa-home"></i>
+        </li>
+        <li>
+            <h2>Humidity</h2>
+            <div  class="val"><span id="hum"></span><small>%</small></div>
+        </li>
+        <li id="AlarmBtn">
+            <h2>Alarm</h2>
+            <div class="val" id="Alarm">OFF</div>
+        </li>
+        </nav>
+    </div>
+    </section>
 </div>
 
-<a href="#" class="fancy-button bg-gradient1" id="voordeur"><span><i class="fa fa-ticket"></i>Voordeur</span></a>
-<a href="#" class="fancy-button bg-gradient1" id="achterdeur"><span><i class="fa fa-ticket"></i>Achterdeur</span></a>
-<a href="#" class="fancy-button bg-gradient1" id="stopcontact"><span><i class="fa fa-ticket"></i>Stopcontact</span></a>
-<a href="#" class="fancy-button bg-gradient1" id="lichtpunten"><span><i class="fa fa-ticket"></i>Lichtpunten</span></a>
-<a href="#" class="fancy-button bg-gradient1" id="edit"><span><i class="fa fa-ticket"></i>Edit Places</span></a>
-
-
-
-
-
-    <!-- The core Firebase JS SDK is always required and must be listed first -->
+    <!-- The core Firebase JS SDK is always required and must be listed first <i class="fas fa-door-closed"></i>-->
 <script src="https://www.gstatic.com/firebasejs/7.3.0/firebase-app.js"></script>
 
 <!-- TODO: Add SDKs for Firebase products that you want to use
